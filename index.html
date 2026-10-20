@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyTV</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:radial-gradient(ellipse at top,#242424,#050505 75%);
+  color:#f5f0e5;
+  font-family:Arial,Tahoma,sans-serif;
+  min-height:100vh;
+  padding:3.5vh 4vw;
+}
+header{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:30px;color:#d6b56d;font-weight:bold;letter-spacing:3px}
+.date{color:#c8b991;font-size:18px}
+.hero{display:flex;justify-content:space-between;align-items:center;margin:5vh 0 4vh}
+h1{font-size:clamp(32px,4vw,58px);margin:0 0 12px}
+.subtitle{color:#c4bda9;font-size:20px}
+.clock{font-size:clamp(44px,7vw,86px);color:#e3c477;font-weight:300}
+.section-title{color:#d6b56d;font-size:22px;margin:25px 0 14px}
+.prayers{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.prayer,.app{
+ border:1px solid #6d572b;background:#121212;
+ border-radius:14px;padding:18px 8px;text-align:center;
+}
+.prayer .name{color:#d6b56d;font-size:17px}
+.prayer .time{font-size:22px;margin-top:12px}
+.apps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.app{font-size:20px;min-height:90px;display:flex;align-items:center;justify-content:center}
+.app:focus,.prayer:focus{outline:3px solid #e4c36e;background:#302515}
+footer{margin-top:28px;color:#958b72;font-size:14px}
+@media(max-width:700px){
+ .prayers{grid-template-columns:repeat(3,1fr)}
+ .apps{grid-template-columns:repeat(2,1fr)}
+ .hero{gap:20px;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">MyTV</div>
+ <div class="date" id="date">جارٍ تحميل التاريخ...</div>
+</header>
+
+<section class="hero">
+ <div>
+  <h1>مساء الخير</h1>
+  <div class="subtitle">أهلًا بك في منزلك</div>
+ </div>
+ <div class="clock" id="clock">--:--</div>
+</section>
+
+<div class="section-title">مواقيت الصلاة</div>
+<div class="prayers">
+ <div class="prayer" tabindex="0"><div class="name">الفجر</div><div class="time">—:—</div></div>
+ <div class="prayer" tabindex="0"><div class="name">الشروق</div><div class="time">—:—</div></div>
+ <div class="prayer" tabindex="0"><div class="name">الظهر</div><div class="time">—:—</div></div>
+ <div class="prayer" tabindex="0"><div class="name">العصر</div><div class="time">—:—</div></div>
+ <div class="prayer" tabindex="0"><div class="name">المغرب</div><div class="time">—:—</div></div>
+ <div class="prayer" tabindex="0"><div class="name">العشاء</div><div class="time">—:—</div></div>
+</div>
+
+<div class="section-title">تطبيقاتك</div>
+<div class="apps">
+ <div class="app" tabindex="0" onclick="openApp('https://www.youtube.com/')">YouTube</div>
+ <div class="app" tabindex="0" onclick="openApp('https://www.netflix.com/')">Netflix</div>
+ <div class="app" tabindex="0" onclick="openApp('https://shahid.mbc.net/')">Shahid</div>
+ <div class="app" tabindex="0" onclick="openApp('https://www.awqaf.gov.ae/?lang=ar')">مواقيت الصلاة</div>
+ <div class="app" tabindex="0" onclick="openApp('https://www.apple.com/apple-tv/')">Apple TV</div>
+</div>
+
+<footer>MyTV · واجهتك المنزلية الخاصة</footer>
+
+<script>
+function updateClock(){
+ const now=new Date();
+ document.getElementById('clock').textContent=
+  now.toLocaleTimeString('ar-AE',{hour:'2-digit',minute:'2-digit',hour12:true});
+ document.getElementById('date').textContent=
+  now.toLocaleDateString('ar-AE',{weekday:'long',day:'numeric',month:'long'})+
+  ' · '+now.toLocaleDateString('ar-SA-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'});
+}
+function openApp(url){window.location.href=url}
+updateClock();
+setInterval(updateClock,1000);
+document.addEventListener('keydown',function(e){
+ const items=[...document.querySelectorAll('[tabindex="0"]')];
+ const current=items.indexOf(document.activeElement);
+ if(e.key==='ArrowLeft'||e.key==='ArrowRight'){
+  e.preventDefault();
+  items[(current+1+items.length)%items.length]?.focus();
+ }
+});
+</script>
+</body>
+</html>
